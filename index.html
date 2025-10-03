@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Old Rock Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Extras for typography & icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        :root {
+            font-size: 16px;
+            --bg-light: #f5f5f5;
+            --text-dark: #1b1b1b;
+            --text-muted: #4a4a4a;
+            --accent-gray: #4f4f4f;
+            color-scheme: light;
+            font-family: "Inter", Arial, sans-serif;
+            --btn-size: 36px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: var(--text-dark);
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        #nav-placeholder {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .main-nav {
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            border-bottom: 1px solid #e5e5e5;
+            position: relative;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .logo img {
+            width: 220px;
+            display: block;
+        }
+
+        .nav-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background: #111111;
+            border-radius: 999px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+        }
+
+        .nav-toggle.is-active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .nav-toggle.is-active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.is-active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .nav-toggle:focus-visible {
+            outline: 2px solid #ff4f8b;
+            outline-offset: 4px;
+        }
+
+        .menu-panel {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: min(320px, 90vw);
+            background: #f5f5f5;
+            color: #111111;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-top: 12px;
+            display: none;
+            text-align: center;
+        }
+
+        .menu-panel.open {
+            display: block;
+        }
+
+        .menu-list,
+        .submenu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-list > li {
+            width: 100%;
+        }
+
+        .menu-link,
+        .submenu-link {
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .menu-link {
+            color: #111111;
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+            padding: 8px 0;
+        }
+
+        .menu-link:focus-visible,
+        .submenu-link:focus-visible {
+            outline: 2px solid #ff4f8b;
+            outline-offset: 4px;
+            border-radius: 6px;
+        }
+
+        .has-submenu {
+            position: relative;
+        }
+
+        .submenu-toggle {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font: inherit;
+            color: inherit;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .submenu-toggle span.icon {
+            transition: transform 0.2s ease;
+        }
+
+        .submenu-toggle[aria-expanded="true"] span.icon {
+            transform: rotate(90deg);
+        }
+
+        .submenu {
+            margin-top: 8px;
+            display: none;
+            padding-left: 0;
+            border: none;
+            text-align: center;
+        }
+
+        .submenu.open {
+            display: block;
+        }
+
+        .submenu-link {
+            color: #4a4a4a;
+            padding: 6px 0;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        .btn-contact {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 16px 0 10px;
+            padding: 8px 18px;
+            border-radius: 10px;
+            background: #ff4f8b;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+        }
+
+        .btn-contact:focus-visible {
+            outline: 2px solid #111111;
+            outline-offset: 4px;
+        }
+
+        .language-switcher {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .language-switcher a {
+            color: #111111;
+            text-decoration: none;
+            position: relative;
+            padding: 2px 0;
+        }
+
+        .language-switcher a:nth-child(2) {
+            transform: translateY(2px);
+        }
+
+        .language-switcher a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 100%;
+            height: 2px;
+            background: #111111;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.2s ease;
+        }
+
+        .language-switcher a:hover::after,
+        .language-switcher a:focus-visible::after {
+            transform: scaleX(1);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        @media (min-width: 960px) {
+            .nav-toggle {
+                display: none;
+            }
+
+            .menu-panel {
+                position: static;
+                display: flex !important;
+                flex-direction: row;
+                align-items: center;
+                background: transparent;
+                box-shadow: none;
+                width: auto;
+                padding: 0;
+                margin-top: 0;
+                text-align: initial;
+            }
+
+            .menu-list {
+                flex-direction: row;
+                align-items: center;
+                gap: 24px;
+                margin-right: 24px;
+            }
+
+            .menu-list > li {
+                width: auto;
+            }
+
+            .menu-link {
+                width: auto;
+                justify-content: flex-start;
+                text-align: left;
+            }
+
+            .submenu {
+                position: absolute;
+                background: #f5f5f5;
+                padding: 16px 20px;
+                border-radius: 12px;
+                margin-top: 12px;
+                display: none;
+                min-width: 220px;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+                text-align: left;
+            }
+
+            .has-submenu:hover .submenu,
+            .has-submenu:focus-within .submenu {
+                display: block;
+            }
+
+            .submenu-link {
+                text-align: left;
+            }
+
+            .submenu-toggle {
+                cursor: default;
+            }
+
+            .submenu-toggle span.icon {
+                display: none;
+            }
+
+            .btn-contact {
+                margin: 0 24px 0 0;
+            }
+
+            .language-switcher {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+
+        .hero-wrap {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.45s ease, opacity 0.45s ease;
+            will-change: transform, opacity;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .slide.active {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide img {
+            width: auto;
+            height: 90vh;
+            max-width: 100vw;
+            object-fit: cover;
+            display: block;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--btn-size);
+            height: var(--btn-size);
+            border-radius: 50%;
+            border: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .nav-btn.left {
+            left: 12px;
+        }
+
+        .nav-btn.right {
+            right: 12px;
+        }
+
+        .nav-btn svg {
+            width: 16px;
+            height: 16px;
+            display: block;
+        }
+
+        .dots {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 18px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dot.active {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        @media (min-width: 900px) {
+            .slide img {
+                height: 85vh;
+            }
+        }
+
+        section {
+            padding: 3.5rem 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
+            margin-bottom: 0.75rem;
+        }
+
+        section p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            max-width: 720px;
+            margin: 0.5rem auto 0;
+        }
+
+        .btn-solid {
+            display: inline-block;
+            margin-top: 1.75rem;
+            padding: 0.85rem 1.9rem;
+            background-color: var(--accent-gray);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            border-radius: 999px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-solid:hover,
+        .btn-solid:focus-visible {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(79, 79, 79, 0.25);
+        }
+
+        .btn-solid:active {
+            transform: translateY(1px);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #111111;
+            width: 140px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            justify-content: center;
+        }
+
+        @media (min-width: 780px) {
+            .services-grid {
+                grid-template-columns: repeat(3, minmax(0, 320px));
+            }
+        }
+
+        @media (max-width: 779px) {
+            .services-grid {
+                grid-template-columns: minmax(0, 320px);
+                justify-content: center;
+            }
+        }
+
+        .service-card {
+            position: relative;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 38px rgba(0, 0, 0, 0.15);
+            background-color: #000;
+            transition: transform 0.25s ease;
+        }
+
+        .service-card:active {
+            transform: scale(0.98);
+        }
+
+        .service-card figure {
+            margin: 0;
+            position: relative;
+            height: 100%;
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .service-card:hover img,
+        .service-card:focus-within img,
+        .service-card:active img {
+            transform: scale(1.08);
+        }
+
+        .service-card figcaption {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 65%, rgba(0,0,0,0.75) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1.75rem;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .service-card h3 {
+            margin: 0 0 0.6rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            margin: 0 0 1.5rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-outline {
+            padding: 0.65rem 1.4rem;
+            border: 2px solid #ffffff;
+            border-radius: 999px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            background-color: transparent;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .btn-outline:hover,
+        .btn-outline:focus-visible {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        .btn-outline:active {
+            transform: translateY(1px);
+        }
+
+        .why-choose {
+            padding: 3.5rem 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .why-choose h2 {
+            margin-bottom: 0.75rem;
+        }
+
+        .why-choose > p {
+            margin-top: 0.75rem;
+        }
+
+        .why-grid {
+            display: grid;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            justify-items: center;
+        }
+
+        @media (min-width: 960px) {
+            .why-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        .why-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            text-align: center;
+        }
+
+        .why-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .why-icon svg {
+            width: 46px;
+            height: 46px;
+            stroke: #111111;
+            fill: none;
+        }
+
+        .why-item strong {
+            font-size: 1.15rem;
+            color: var(--text-dark);
+        }
+
+        .why-item p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 280px;
+            margin: 0;
+        }
+
+        /* New sections styling */
+        .registration-section,
+        .map-wrapper,
+        .contact-wrapper,
+        .testimonials-wrapper {
+            padding: clamp(3.5rem, 7vw, 5rem) 1.5rem;
+        }
+
+        .registration-section {
+            background: #f3f5f9;
+        }
+
+        .registration-container,
+        .testimonials-container,
+        .map-container,
+        .contact-container {
+            max-width: 900px;
+            margin: 0 auto;
+            font-family: "Inter", Arial, sans-serif;
+        }
+
+        /* New form container (from provided code) */
+        .form-container {
+            max-width: 450px;
+            background: #fff;
+            padding: 20px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container select,
+        .form-container textarea,
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .form-container textarea {
+            resize: vertical;
+        }
+
+        .form-container button {
+            margin-top: 20px;
+            background: #555;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .form-container button:hover {
+            background: #333;
+        }
+
+        .phone-group {
+            display: flex;
+            gap: 5px;
+        }
+
+        .phone-group select {
+            flex: 1;
+        }
+
+        .phone-group input {
+            flex: 2;
+        }
+
+        .testimonials-section {
+            text-align: center;
+        }
+
+        .testimonials-section h2 {
+            font-size: clamp(1.8rem, 3vw, 2.3rem);
+            margin-bottom: 0.75rem;
+        }
+
+        .scroll-hint {
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.08);
+            color: #1b1f2a;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .scroll-hint .hand-icon {
+            font-size: 1.15rem;
+            color: #000000;
+            filter: grayscale(100%);
+            animation: wiggle 1.8s infinite ease-in-out;
+            transform-origin: bottom left;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-14deg); }
+        }
+
+        .testimonial-track {
+            margin-top: 26px;
+            padding: 8px 4px 18px;
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(260px, 1fr);
+            gap: 22px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .testimonial-track::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .testimonial-track::-webkit-scrollbar-thumb {
+            background: rgba(75, 91, 255, 0.35);
+            border-radius: 999px;
+        }
+
+        .testimonial-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 26px 22px;
+            box-shadow: 0 12px 28px rgba(36, 41, 52, 0.08);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+            min-height: 210px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(27, 31, 42, 0.15);
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            color: #1b1f2a;
+        }
+
+        .testimonial-country {
+            font-size: 0.9rem;
+            color: #5f6475;
+        }
+
+        .testimonial-quote {
+            font-size: 0.95rem;
+            color: #5f6475;
+            line-height: 1.6;
+        }
+
+        .map-wrapper {
+            background: #ffffff;
+        }
+
+        .map-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 24px 48px rgba(27, 31, 42, 0.08);
+            padding: clamp(24px, 4vw, 36px);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            border-radius: 18px;
+            border: 0;
+        }
+
+        .contact-wrapper {
+            background: linear-gradient(140deg, rgba(75, 91, 255, 0.12), rgba(255, 79, 139, 0.12));
+        }
+
+        .contact-section {
+            max-width: 900px;
+            margin: 0 auto;
+            background: transparent;
+            text-align: center;
+            font-family: "Inter", Arial, sans-serif;
+        }
+
+        .contact-section h2 {
+            font-size: clamp(1.7rem, 2.8vw, 2.2rem);
+            margin-bottom: 1rem;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: #1b1f2a;
+        }
+
+        .contact-details a {
+            color: #1b1f2a;
+            text-decoration: none;
+        }
+
+        .contact-icons {
+            margin-top: 26px;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .contact-icons a {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #ffffff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .contact-icons a.facebook { background: #1877f2; }
+        .contact-icons a.email { background: #2d2f3a; }
+        .contact-icons a.whatsapp { background: #1fa855; }
+
+        .contact-icons a:hover,
+        .contact-icons a:focus-visible {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+            outline: none;
+        }
+
+        footer {
+            padding: 2rem 1.5rem 2.5rem;
+            font-family: "Inter", Arial, sans-serif;
+            color: #5f6475;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav" id="nav-placeholder">
+        <a href="/" class="logo">
+            <img src="https://i.ibb.co/JRxTWgvv/noroot.png" alt="noroot">
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span class="sr-only">Ouvrir le menu</span>
+        </button>
+
+        <div class="menu-panel" id="primary-menu">
+            <ul class="menu-list">
+                <li><a class="menu-link" href="/home.html">Home</a></li>
+                <li><a class="menu-link" href="/about.html">About us</a></li>
+
+                <li class="has-submenu">
+                    <button class="submenu-toggle" aria-expanded="false">
+                        Services <span class="icon" aria-hidden="true">▸</span>
+                    </button>
+                    <ul class="submenu">
+                        <li><a class="submenu-link" href="/services/tourist-student-visa.html">Tourist &amp; Student Visa</a></li>
+                        <li><a class="submenu-link" href="/services/certified-translation.html">Certified Translation</a></li>
+                        <li><a class="submenu-link" href="/services/application-support.html">Application Support</a></li>
+                        <li><a class="submenu-link" href="/services/germany-program.html">Germany Program</a></li>
+                    </ul>
+                </li>
+
+                <li><a class="menu-link" href="#registration">Registration form</a></li>
+                <li><a class="menu-link" href="#location">Location</a></li>
+            </ul>
+
+            <a class="btn-contact" href="#contact">Contact</a>
+
+            <nav class="language-switcher" aria-label="Choisir la langue">
+                <a href="?lang=en">English</a>
+                <a href="?lang=ar">العربية</a>
+            </nav>
+        </div>
+    </nav>
+
+    <div class="hero-wrap">
+        <div class="carousel" id="carousel">
+            <div class="slide active" data-index="0">
+                <img src="https://static.tildacdn.com/tild3431-6136-4335-a661-383961333336/1000070569.png" alt="Photo 1">
+            </div>
+
+            <div class="slide" data-index="1">
+                <img src="https://i.ibb.co/FkLssWM7/Your-Gateway-to-the-World-20251002-183633-0001.png" alt="Photo 2">
+            </div>
+
+            <div class="slide" data-index="2">
+                <img src="https://static.tildacdn.com/tild3064-6230-4463-b261-643766613961/1000070607.png" alt="Photo 3">
+            </div>
+
+            <div class="slide" data-index="3">
+                <img src="https://static.tildacdn.com/tild6637-6365-4339-b338-313263353564/1000070618.png" alt="Photo 4">
+            </div>
+
+            <button class="nav-btn left" id="prev" aria-label="Précédent">
+                <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+
+            <button class="nav-btn right" id="next" aria-label="Suivant">
+                <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+
+            <div class="dots" id="dots" aria-hidden="true">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+                <div class="dot" data-index="3"></div>
+            </div>
+        </div>
+    </div>
+
+    <section aria-labelledby="about-title">
+        <h2 id="about-title">About Us</h2>
+        <p>
+            At Old Rock Services, we simplify your journey abroad. From visa applications to certified translations and university support, our expert team ensures fast and reliable service tailored to your goals.
+        </p>
+        <a class="btn-solid" href="about.html">Learn more</a>
+    </section>
+
+    <hr class="divider">
+
+    <section aria-labelledby="services-title">
+        <h2 id="services-title">Our Services</h2>
+        <p>
+            We assist and support our clients in achieving their travel, study, or immigration goals quickly and efficiently.
+        </p>
+
+        <div class="services-grid">
+            <article class="service-card">
+                <figure>
+                    <img src="https://i.ibb.co/CKs3Rbbk/visa-application-form-smartphone.jpg" alt="visa-application-form-smartphone">
+                    <figcaption>
+                        <h3>Tourist &amp; Student Visas</h3>
+                        <p>We assist you in obtaining fast and reliable tourist or student visas to multiple countries.</p>
+                        <a class="btn-outline" href="serv.html">Learn more</a>
+                    </figcaption>
+                </figure>
+            </article>
+
+            <article class="service-card">
+                <figure>
+                    <img src="https://i.ibb.co/rTG9fyS/man-flipping-pages-writing.jpg" alt="Certified translation services">
+                    <figcaption>
+                        <h3>Certified Translation</h3>
+                        <p>Official and certified translation of all your documents for international procedures.</p>
+                        <a class="btn-outline" href="serv.html">Learn more</a>
+                    </figcaption>
+                </figure>
+            </article>
+
+            <article class="service-card">
+                <figure>
+                    <img src="https://i.ibb.co/j0qKn80/Germany-Flag-Passport-and-Visa-Stamp.jpg" alt="Programmes pour l'Allemagne">
+                    <figcaption>
+                        <h3>Special Program for Germany</h3>
+                        <p>Work contracts, language stays, and student visas for Germany.</p>
+                        <a class="btn-outline" href="serv.html">Learn more</a>
+                    </figcaption>
+                </figure>
+            </article>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <section class="why-choose" aria-labelledby="why-choose-title">
+        <h2 id="why-choose-title">Why Choose Us?</h2>
+        <p>We will provide you with the best services based on our significant industry experience.</p>
+
+        <div class="why-grid">
+            <div class="why-item">
+                <span class="why-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M24 4l16 6v10c0 11-6.5 20.5-16 24-9.5-3.5-16-13-16-24V10l16-6z" stroke-width="3" stroke-linejoin="round"></path>
+                        <path d="M17 24l5 5 9-9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <strong>6 years of experience</strong>
+                <p>We have built a strong reputation as professionals in our field, delivering reliable and high-quality services to a wide range of clients.</p>
+            </div>
+            <div class="why-item">
+                <span class="why-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                        <circle cx="16" cy="14" r="5" stroke-width="3"></circle>
+                        <circle cx="32" cy="14" r="5" stroke-width="3"></circle>
+                        <path d="M10 34v-6a6 6 0 016-6h2l7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M38 34v-6a6 6 0 00-6-6h-2l-7 7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                        <path d="M18 28l6 6 6-6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <strong>Individual approach</strong>
+                <p>Each company has its own philosophy and motto. We strive to develop the best service for our customers.</p>
+            </div>
+            <div class="why-item">
+                <span class="why-icon" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                        <path d="M24 6c6 4 10 10 10 18 0 6-2 12-6 16l-4 4-4-4c-4-4-6-10-6-16 0-8 4-14 10-18z" stroke-width="3" stroke-linejoin="round"></path>
+                        <path d="M24 6v12" stroke-width="3" stroke-linecap="round"></path>
+                        <path d="M20 32l4 4 4-4" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <strong>We grow for the future</strong>
+                <p>Our experienced team guides you with efficiency and professionalism to bring your travel, study, or international mobility plans to life.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Registration Section with replaced form -->
+    <section class="registration-section" id="registration">
+        <div class="registration-container">
+            <div class="form-container">
+                <h2>Application Form</h2>
+                <form action="https://formsubmit.co/contact@oldrockservices.com" method="POST">
+                    <!-- Anti-spam (FormSubmit obligatoire) -->
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_subject" value="New Application Form Submission">
+                    <input type="hidden" name="_next" value="https://oldrockservices.com/thank-you.html">
+
+                    <!-- Name -->
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="Name" required>
+
+                    <!-- Nationality -->
+                    <label for="nationality">Nationality</label>
+                    <input type="text" id="nationality" name="Nationality" required>
+
+                    <!-- Country of Residence -->
+                    <label for="residence">Country of Residence</label>
+                    <input type="text" id="residence" name="Country of Residence" required>
+
+                    <!-- Residential Address -->
+                    <label for="address">Residential Address</label>
+                    <input type="text" id="address" name="Residential Address" required>
+
+                    <!-- Phone -->
+                    <label for="phone">Phone</label>
+                    <div class="phone-group">
+                        <select id="country-code" name="Country Code" required>
+                            <option value="+974" selected>Qatar (+974)</option>
+                            <option value="+213">Algeria (+213)</option>
+                            <option value="+971">UAE (+971)</option>
+                            <option value="+966">Saudi Arabia (+966)</option>
+                            <option value="+20">Egypt (+20)</option>
+                            <option value="+1">USA (+1)</option>
+                            <option value="+44">UK (+44)</option>
+                            <option value="+33">France (+33)</option>
+                            <option value="+49">Germany (+49)</option>
+                            <option value="+39">Italy (+39)</option>
+                            <option value="+91">India (+91)</option>
+                        </select>
+                        <input type="tel" id="phone" name="Phone" placeholder="Enter phone number" required>
+                    </div>
+
+                    <!-- Service Needed -->
+                    <label for="service">Service Needed</label>
+                    <select id="service" name="Service Needed" required>
+                        <option value="Tourist Visa">Tourist Visa</option>
+                        <option value="Study Visa">Study Visa</option>
+                        <option value="Certified Translation">Certified Translation</option>
+                        <option value="Germany Program">Germany Program</option>
+                        <option value="Other">Other</option>
+                    </select>
+
+                    <!-- Comments -->
+                    <label for="comments">Comments (optional)</label>
+                    <textarea id="comments" name="Comments" rows="4" placeholder="Write your message..."></textarea>
+
+                    <!-- Submit -->
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-wrapper">
+        <div class="testimonials-container testimonials-section" aria-labelledby="testimonials-title">
+            <h2 id="testimonials-title">What our clients say about us</h2>
+            <div class="scroll-hint">
+                <i class="fa-regular fa-hand-point-left hand-icon" aria-hidden="true"></i>
+                <span>Swipe or drag left to see more</span>
+            </div>
+
+            <div class="testimonial-track" role="list">
+                <article class="testimonial-card" role="listitem">
+                    <img class="testimonial-avatar" src="https://i.ibb.co/4nDTDHLh/b8614b9b-6f5c-4aab-bf58-d65be6035343.jpg" alt="Portrait of Amina">
+                    <div class="testimonial-name">Amina</div>
+                    <div class="testimonial-country">Tunisia</div>
+                    <p class="testimonial-quote">
+                        “I got my student visa for Canada with their help. The team was incredibly responsive, helped me prepare all the documents, and even reviewed my motivation letter.”
+                    </p>
+                </article>
+
+                <article class="testimonial-card" role="listitem">
+                    <img class="testimonial-avatar" src="https://i.ibb.co/XZc835Py/48effb32-1467-471f-9d6d-a0556464f6ea.jpg" alt="Portrait of Mohammed Al Thani">
+                    <div class="testimonial-name">Mohammed Al Thani</div>
+                    <div class="testimonial-country">Qatar</div>
+                    <p class="testimonial-quote">
+                        “Their translation service was fast and 100% accepted by the embassy. Very reliable and efficient.”
+                    </p>
+                </article>
+
+                <article class="testimonial-card" role="listitem">
+                    <img class="testimonial-avatar" src="https://i.ibb.co/QFNC3X5M/image.jpg" alt="Portrait of Sarah Khaled">
+                    <div class="testimonial-name">Sarah Khaled</div>
+                    <div class="testimonial-country">Algeria</div>
+                    <p class="testimonial-quote">
+                        “Old Rock Services helped me secure my German student visa in less than a month. The process was smooth and professional. Highly recommended!”
+                    </p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map -->
+    <section class="map-wrapper" aria-label="Old Rock Services location" id="location">
+        <div class="map-container">
+            <iframe 
+              width="100%" 
+              height="350" 
+              frameborder="0" 
+              style="border:0" 
+              src="https://www.google.com/maps?q=Al+Naser+Tower+A&output=embed" 
+              allowfullscreen>
+            </iframe>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact-wrapper" id="contact">
+        <div class="contact-container contact-section">
+            <h2>Contact us</h2>
+            <div class="contact-details">
+                <a href="mailto:contact@oldrockservices.com">contact@oldrockservices.com</a>
+                <a href="tel:+97474085000">+974 7408 5000</a>
+            </div>
+
+            <div class="contact-icons" aria-label="Social links">
+                <a class="facebook" href="https://www.facebook.com/oldrockservices?mibextid=ZbWKwL" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a class="email" href="mailto:contact@oldrockservices.com" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a class="whatsapp" href="https://wa.me/97474085000" target="_blank" rel="noopener" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © All rights reserved. Old Rock Services
+    </footer>
+
+    <script>
+        (function () {
+            const navToggle = document.querySelector(".nav-toggle");
+            const menuPanel = document.querySelector(".menu-panel");
+            const submenuToggles = document.querySelectorAll(".submenu-toggle");
+
+            if (navToggle && menuPanel) {
+                navToggle.addEventListener("click", () => {
+                    const isOpen = menuPanel.classList.toggle("open");
+                    navToggle.classList.toggle("is-active", isOpen);
+                    navToggle.setAttribute("aria-expanded", String(isOpen));
+                });
+
+                document.addEventListener("click", (event) => {
+                    const clickedInside = menuPanel.contains(event.target) || navToggle.contains(event.target);
+                    if (!clickedInside) {
+                        menuPanel.classList.remove("open");
+                        navToggle.classList.remove("is-active");
+                        navToggle.setAttribute("aria-expanded", "false");
+                        submenuToggles.forEach((toggle) => {
+                            toggle.setAttribute("aria-expanded", "false");
+                            const submenu = toggle.nextElementSibling;
+                            if (submenu) submenu.classList.remove("open");
+                        });
+                    }
+                });
+            }
+
+            submenuToggles.forEach((toggle) => {
+                const submenu = toggle.nextElementSibling;
+                if (!submenu) return;
+
+                toggle.addEventListener("click", () => {
+                    const isOpen = submenu.classList.toggle("open");
+                    toggle.setAttribute("aria-expanded", String(isOpen));
+                });
+            });
+        })();
+
+        (function(){
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevBtn = document.getElementById('prev');
+            const nextBtn = document.getElementById('next');
+            const dots = Array.from(document.querySelectorAll('.dot'));
+            let current = 0;
+
+            function goTo(index){
+                index = (index + slides.length) % slides.length;
+                slides.forEach(s => s.classList.remove('active'));
+                dots.forEach(d => d.classList.remove('active'));
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+                current = index;
+            }
+
+            prevBtn.addEventListener('click', ()=> goTo(current - 1));
+            nextBtn.addEventListener('click', ()=> goTo(current + 1));
+
+            window.addEventListener('keydown', (e)=>{
+                if(e.key === 'ArrowLeft') prevBtn.click();
+                if(e.key === 'ArrowRight') nextBtn.click();
+            });
+        })();
+    </script>
+</body>
+  </html>
